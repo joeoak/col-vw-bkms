@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 
 export const App = () => {
   const [bookmarks, setBookmarks] = useState([]);
+  const [openFolders, setOpenFolders] = useState([]);
+  const [openFoldersIds, setOpenFoldersIds] = useState([]);
 
   useEffect(() => {
     chrome.bookmarks.getTree((tree) => {
@@ -11,32 +13,60 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    if (bookmarks.length > 0) console.log(bookmarks);
-    if (bookmarks[0]) console.log(bookmarks[0].children);
+    if (bookmarks.length > 0) {
+      setOpenFolders([<Column callback={updateOpenFoldersIds} bookmarks={bookmarks} />]);
+      findAndSetOpenFolders(bookmarks);
+    }
   }, [bookmarks]);
 
-  return (
-    <div className="cols">
-      <Column bookmarks={bookmarks} />
-      {bookmarks[0] ? <Column bookmarks={bookmarks[0].children} /> : ''}
-    </div>
-  );
+  useEffect(() => {
+    console.log(openFoldersIds);
+    setOpenFolders([<Column callback={updateOpenFoldersIds} bookmarks={bookmarks} />]);
+    findAndSetOpenFolders(bookmarks);
+  }, [openFoldersIds]);
+
+  const updateOpenFoldersIds = (id) => {
+    if (!openFoldersIds.includes(id)) {
+      setOpenFoldersIds((openFoldersIds) => [...openFoldersIds, id]);
+    }
+  };
+
+  const findAndSetOpenFolders = (arr) => {
+    arr.forEach((bookmark) => {
+      if (bookmark.children) {
+        if (openFoldersIds.includes(bookmark.id)) {
+          setOpenFolders((openFolders) => [...openFolders, <Column callback={updateOpenFoldersIds} bookmarks={bookmark.children} />]);
+        }
+        return findAndSetOpenFolders(bookmark.children);
+      }
+    });
+  };
+
+  return <div className="columns">{openFolders}</div>;
 };
 
 const Column = (props) => {
   return (
-    <div className="col">
+    <div className="column">
       {props.bookmarks.map((bookmark) => (
-        <Link url={bookmark.url}>{bookmark.title}</Link>
+        <Bookmark callback={props.callback} id={bookmark.id} url={bookmark.url}>
+          {bookmark.title}
+        </Bookmark>
       ))}
     </div>
   );
 };
 
-const Link = (props) => {
+const Bookmark = (props) => {
+  const onClick = () => {
+    return props.callback(props.id);
+  };
+
   return (
-    <div className="bkm">
-      <a href={props.url}>{props.children}</a>
+    <div className="bookmark">
+      <a href={props.url} onClick={() => onClick()}>
+        {props.children}
+      </a>
     </div>
   );
 };
