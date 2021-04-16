@@ -26,7 +26,7 @@ export const App = () => {
     arr.forEach((bookmark) => {
       if (bookmark.children) {
         if (openFoldersIds.some((obj) => obj.id === bookmark.id)) {
-          setOpenFolders((openFolders) => [...openFolders, <Column callback={updateOpenFoldersIds} bookmarks={bookmark.children} />]);
+          setOpenFolders((openFolders) => [...openFolders, <Column callback={updateOpenFoldersIds} bookmarks={bookmark.children} openFoldersIds={openFoldersIds} />]);
         }
         return findAndSetOpenFolders(bookmark.children);
       }
@@ -57,15 +57,24 @@ export const App = () => {
 };
 
 const Column = (props) => {
-  return (
-    <div className="column">
-      {props.bookmarks.map((bookmark) => (
-        <Bookmark callback={props.callback} bookmark={bookmark}>
-          {bookmark.title}
-        </Bookmark>
-      ))}
-    </div>
-  );
+  const returnBookmarks = () => {
+    const bookmarksArr = props.bookmarks.map((bookmark) => (
+      <Bookmark callback={props.callback} bookmark={bookmark} openFoldersIds={props.openFoldersIds}>
+        {bookmark.title}
+      </Bookmark>
+    ));
+    return bookmarksArr;
+  };
+
+  const returnEmptyState = () => {
+    return (
+      <div>
+        <i>This folder is empty</i>
+      </div>
+    );
+  };
+
+  return <div className="column">{props.bookmarks.length > 0 ? returnBookmarks() : returnEmptyState()}</div>;
 };
 
 const Bookmark = (props) => {
@@ -73,8 +82,12 @@ const Bookmark = (props) => {
     return props.callback({ id: props.bookmark.id, parentId: props.bookmark.parentId });
   };
 
+  const isSelected = () => {
+    return props.openFoldersIds.some((obj) => obj.id === props.bookmark.id);
+  };
+
   return (
-    <div className="bookmark">
+    <div className={isSelected() ? 'bookmark selected' : 'bookmark'}>
       <a href={props.bookmark.url} onClick={() => onClick()}>
         {props.children}
       </a>

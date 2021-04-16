@@ -1,7 +1,7 @@
 {
   "author": "Joe Oak",
   "chrome_url_overrides": {
-    "bookmarks": "index.html"
+    "newtab": "index.html"
   },
   "icons": {
     "16": "logo192.png",
