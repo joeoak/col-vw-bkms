@@ -1,8 +1,9 @@
 {
   "author": "Joe Oak",
   "chrome_url_overrides": {
-    "newtab": "index.html"
+    "bookmarks": "index.html"
   },
+  "content_security_policy": "img-src chrome://favicon",
   "icons": {
     "16": "logo192.png",
     "48": "logo192.png",

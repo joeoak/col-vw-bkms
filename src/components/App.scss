@@ -1,9 +1,12 @@
 :root {
 	--background-color: white;
 	--border-color: rgba(0, 0, 0, 0.16);
+	--column-item-background-focus: #0063de;
 	--column-item-background-hover: rgba(0, 0, 0, 0.08);
 	--column-item-background-selected: rgba(0, 0, 0, 0.12);
+	--column-item-font-color-focus: rgba(255, 255, 255, 0.96);
 	--column-item-icon-fill: rgba(0, 0, 0, 0.48);
+	--column-item-icon-fill-focus: rgba(255, 255, 255, 0.64);
 	--focus-outline: rgba(0, 0, 0, 0.96);
 	--font-color: rgba(0, 0, 0, 0.96);
 	--font-color-hint: rgba(0, 0, 0, 0.48);
@@ -13,9 +16,12 @@
 	:root {
 		--background-color: black;
 		--border-color: rgba(255, 255, 255, 0.16);
+		--column-item-background-focus: #0058cd;
 		--column-item-background-hover: rgba(255, 255, 255, 0.12);
 		--column-item-background-selected: rgba(255, 255, 255, 0.18);
+		--column-item-font-color-focus: rgba(255, 255, 255, 0.96);
 		--column-item-icon-fill: rgba(255, 255, 255, 0.64);
+		--column-item-icon-fill-focus: rgba(255, 255, 255, 0.64);
 		--focus-outline: rgba(255, 255, 255, 0.96);
 		--font-color: rgba(255, 255, 255, 0.96);
 		--font-color-hint: rgba(255, 255, 255, 0.48);
@@ -28,24 +34,17 @@
 	padding: 0;
 }
 
-*:focus {
-	outline: none;
-}
-
-*:focus-visible {
-	outline: 2px solid var(--focus-outline);
-}
-
 html {
 	font-size: 16px;
 }
 
 body {
+	background-color: var(--background-color);
 	font-family: 'system-ui';
-	color: var(--font-color);
 	font-size: 1rem;
 	line-height: 1.5;
-	background-color: var(--background-color);
+	color: var(--font-color);
+	text-rendering: geometricPrecision;
 }
 
 a {
@@ -69,7 +68,7 @@ a {
 .columns {
 	flex-grow: 1;
 	display: flex;
-  overflow-x: auto;
+	overflow-x: auto;
 }
 
 .column {
@@ -85,6 +84,7 @@ a {
 .column-item {
 	display: flex;
 	border-radius: 0.25rem;
+	// transition: background-color 200ms, color 200ms;
 	user-select: none;
 
 	&.bookmark:hover,
@@ -105,7 +105,18 @@ a {
 	&.selected,
 	&.selected:hover {
 		background-color: var(--column-item-background-selected);
-		font-weight: 700;
+	}
+
+	&:focus,
+	&:focus:hover {
+		outline: none;
+		background-color: var(--column-item-background-focus);
+		color: var(--column-item-font-color-focus);
+
+		& path {
+			fill: var(--column-item-icon-fill-focus);
+			// transition: fill 200ms;
+		}
 	}
 }
 

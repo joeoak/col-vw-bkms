@@ -1,11 +1,12 @@
 /* global chrome */
 import React, { useEffect, useState } from 'react';
 import { Column } from './Column';
-import { fakeTree } from './fakeTree';
+// import { fakeTree } from './fakeTree';
 import './App.scss';
 
 export const App = () => {
 	const [bookmarkTree, setBookmarkTree] = useState([]);
+	const [focusColumn, setFocusColumn] = useState(0);
 	const [openFolderElements, setOpenFolderElements] = useState([]);
 	const [openFolderIds, setOpenFolderIds] = useState([{ id: '0', parentId: null }]);
 
@@ -13,11 +14,20 @@ export const App = () => {
 		arr.forEach((node) => {
 			if (node.children) {
 				if (openFolderIds.some((obj) => obj.id === node.id)) {
-					setOpenFolderElements((openFolderElements) => [...openFolderElements, <Column node={node} rootObj={rootObj} key={node.id} />]);
+					setOpenFolderElements((openFolderElements) => [...openFolderElements, <Column columnIndex={openFolderElements.length} node={node} rootObj={rootObj} key={node.id} />]);
 				}
-				return findAndSetOpenFolders(node.children);
+				findAndSetOpenFolders(node.children);
 			}
 		});
+	};
+
+	const getOpenFolderIdsLocalStorage = () => {
+		let openFolderIdsLocalStorage = JSON.parse(window.localStorage.getItem('columnViewBookmarks-openFolderIds'));
+		if (openFolderIdsLocalStorage) return setOpenFolderIds(openFolderIdsLocalStorage);
+	};
+
+	const setOpenFolderIdsLocalStorage = (newOpenFolderIds) => {
+		window.localStorage.setItem('columnViewBookmarks-openFolderIds', JSON.stringify(newOpenFolderIds));
 	};
 
 	const updateOpenFolderIds = (folderObj) => {
@@ -31,39 +41,43 @@ export const App = () => {
 				newOpenFolderIds.unshift(parentFolder);
 				targetFolder = parentFolder;
 			}
+			setOpenFolderIdsLocalStorage(newOpenFolderIds);
 			setOpenFolderIds(newOpenFolderIds);
 		}
 	};
 
 	const rootObj = {
-		openFolderIdsCallback: updateOpenFolderIds,
+		focusColumn: focusColumn,
+		setFocusColumn: setFocusColumn,
 		openFolderIds: openFolderIds,
+		openFolderIdsCallback: updateOpenFolderIds,
 	};
 
 	useEffect(() => {
-		// chrome.bookmarks.getTree((tree) => {
-		//   setBookmarkTree(tree);
-		// });
-		setBookmarkTree(fakeTree);
+		chrome.bookmarks.getTree((tree) => {
+		  setBookmarkTree(tree);
+		});
+		// setBookmarkTree(fakeTree);
+		getOpenFolderIdsLocalStorage();
 	}, []);
 
 	useEffect(() => {
 		if (bookmarkTree.length > 0) {
 			setOpenFolderElements([]);
-			return findAndSetOpenFolders(bookmarkTree);
+			findAndSetOpenFolders(bookmarkTree);
 		}
 		// eslint-disable-next-line
 	}, [bookmarkTree]);
 
 	useEffect(() => {
 		setOpenFolderElements([]);
-		return findAndSetOpenFolders(bookmarkTree);
+		findAndSetOpenFolders(bookmarkTree);
 		// eslint-disable-next-line
-	}, [openFolderIds]);
+	}, [focusColumn, openFolderIds]);
 
 	return (
 		<>
-			<div className='app-header'>Bookmarks</div>
+			<div className='app-header'>Column View Bookmarks</div>
 			<div className='columns'>{openFolderElements}</div>
 		</>
 	);
