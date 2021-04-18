@@ -1,79 +1,70 @@
 /* global chrome */
 import React, { useEffect, useState } from 'react';
 import { Column } from './Column';
-import { ContextMenu } from './ContextMenu';
 import { fakeTree } from './fakeTree';
 import './App.scss';
 
 export const App = () => {
-	const [bookmarks, setBookmarks] = useState([]);
-	const [openFolders, setOpenFolders] = useState([]);
-	const [openFoldersIds, setOpenFoldersIds] = useState([{ id: '0', parentId: null }]);
-	const [contextMenuCoordinates, setContextMenuCoordinates] = useState({});
-
-	useEffect(() => {
-		// chrome.bookmarks.getTree((tree) => {
-		//   setBookmarks(tree);
-		// });
-		setBookmarks(fakeTree);
-	}, []);
+	const [bookmarkTree, setBookmarkTree] = useState([]);
+	const [openFolderElements, setOpenFolderElements] = useState([]);
+	const [openFolderIds, setOpenFolderIds] = useState([{ id: '0', parentId: null }]);
 
 	const findAndSetOpenFolders = (arr) => {
-		arr.forEach((bookmark) => {
-			if (bookmark.children) {
-				if (openFoldersIds.some((obj) => obj.id === bookmark.id)) {
-					setOpenFolders((openFolders) => [...openFolders, <Column callback={updateOpenFoldersIds} contextMenuCallback={updateContextMenu} bookmarks={bookmark.children} key={bookmark.id} openFoldersIds={openFoldersIds} />]);
+		arr.forEach((node) => {
+			if (node.children) {
+				if (openFolderIds.some((obj) => obj.id === node.id)) {
+					setOpenFolderElements((openFolderElements) => [...openFolderElements, <Column node={node} rootObj={rootObj} key={node.id} />]);
 				}
-				return findAndSetOpenFolders(bookmark.children);
+				return findAndSetOpenFolders(node.children);
 			}
 		});
 	};
 
-	const updateContextMenu = (msg) => {
-		return setContextMenuCoordinates(msg);
-	};
-
-	const updateOpenFolders = () => {
-		setOpenFolders([]);
-		return findAndSetOpenFolders(bookmarks);
-	};
-
-	const updateOpenFoldersIds = (folderObj) => {
-		if (!openFoldersIds.some((obj) => obj.id === folderObj)) {
-			let newArr = [folderObj];
+	const updateOpenFolderIds = (folderObj) => {
+		if (!openFolderIds.some((obj) => obj.id === folderObj)) {
+			const findParentFolder = (parentId) => openFolderIds.find((obj) => obj.id === parentId);
+			let newOpenFolderIds = [folderObj];
 			let targetFolder = folderObj;
-			let findParentFolder = (parentId) => openFoldersIds.find((obj) => obj.id === parentId);
-
+			let parentFolder;
 			while (targetFolder.id !== '0') {
-				let parentFolder = findParentFolder(targetFolder.parentId);
-				newArr.unshift(parentFolder);
+				parentFolder = findParentFolder(targetFolder.parentId);
+				newOpenFolderIds.unshift(parentFolder);
 				targetFolder = parentFolder;
 			}
-
-			setOpenFoldersIds(newArr);
+			setOpenFolderIds(newOpenFolderIds);
 		}
 	};
 
-	useEffect(() => {
-		if (bookmarks.length > 0) updateOpenFolders();
-		// eslint-disable-next-line
-	}, [bookmarks]);
-
-	useEffect(() => {
-		updateOpenFolders();
-		// eslint-disable-next-line
-	}, [openFoldersIds]);
-
-	const onClick = () => {
-		return setContextMenuCoordinates({ x: '0px', y: '0px', msg: '' });
+	const rootObj = {
+		openFolderIdsCallback: updateOpenFolderIds,
+		openFolderIds: openFolderIds,
 	};
+
+	useEffect(() => {
+		// chrome.bookmarks.getTree((tree) => {
+		//   setBookmarkTree(tree);
+		// });
+		setBookmarkTree(fakeTree);
+	}, []);
+
+	useEffect(() => {
+		if (bookmarkTree.length > 0) {
+			setOpenFolderElements([]);
+			return findAndSetOpenFolders(bookmarkTree);
+		}
+		// eslint-disable-next-line
+	}, [bookmarkTree]);
+
+	useEffect(() => {
+		setOpenFolderElements([]);
+		return findAndSetOpenFolders(bookmarkTree);
+		// eslint-disable-next-line
+	}, [openFolderIds]);
 
 	return (
 		<>
-			{/* <ContextMenu coordinates={contextMenuCoordinates} /> */}
-			<div className='columns' onClick={() => onClick()}>
-				{openFolders}
-			</div>
+			<div className='app-header'>Bookmarks</div>
+			<div className='columns'>{openFolderElements}</div>
 		</>
 	);
 };

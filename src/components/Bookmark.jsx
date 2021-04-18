@@ -1,19 +1,13 @@
 import React from 'react';
 
-export const Bookmark = ({ contextMenuCallback, bookmark }) => {
+export const Bookmark = ({ bookmark }) => {
 	const faviconStyle = {
 		backgroundImage: `url(http://www.google.com/s2/favicons?domain=${bookmark.url})`,
 	};
 
-	const onContextMenu = (e) => {
-		e.preventDefault();
-		let coordinates = { x: e.pageX, y: e.pageY, title: 'yomamasofat' };
-		return contextMenuCallback(coordinates);
-	};
-
 	return (
-		<a className='column-item bookmark' href={bookmark.url} onContextMenu={(e) => onContextMenu(e)}>
-			<div className='column-item-icon' style={faviconStyle}></div>
+		<a className='column-item bookmark' href={bookmark.url}>
+			<div className='column-item-icon'><div className='favicon' style={faviconStyle}></div></div>
 			<div className='column-item-title'>{bookmark.title}</div>
 		</a>
 	);

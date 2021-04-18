@@ -1,6 +1,31 @@
+const levelFour = (parentId) => {
+	return [
+		{
+			children: [],
+			id: '10',
+			parentId: parentId,
+			title: 'Airbnb',
+			url: 'https://www.airbnb.com',
+		},
+		{
+			id: '11',
+			parentId: parentId,
+			title: 'Airbnb',
+			url: 'https://www.airbnb.com',
+		},
+		{
+			id: '12',
+			parentId: parentId,
+			title: 'Airbnb',
+			url: 'https://www.airbnb.com',
+		},
+	];
+};
+
 const levelThree = (parentId) => {
 	return [
 		{
+			children: levelFour('7'),
 			id: '7',
 			parentId: parentId,
 			title: 'Airbnb',
