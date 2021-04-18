@@ -1,16 +1,16 @@
 {
-  "author": "Joe Oak",
-  "chrome_url_overrides": {
-    "bookmarks": "index.html"
-  },
-  "content_security_policy": "img-src chrome://favicon",
-  "icons": {
-    "16": "logo192.png",
-    "48": "logo192.png",
-    "128": "logo192.png"
-  },
-  "manifest_version": 2,
-  "name": "Column View Bookmarks",
-  "permissions": ["bookmarks"],
-  "version": "0.1"
+	"author": "Joe Oak",
+	"chrome_url_overrides": {
+		"bookmarks": "index.html"
+	},
+	"content_security_policy": "default-src 'self'; img-src chrome://favicon; object-src 'self'; script-src 'self';",
+	"icons": {
+		"16": "logo192.png",
+		"48": "logo192.png",
+		"128": "logo192.png"
+	},
+	"manifest_version": 2,
+	"name": "Column View Bookmarks",
+	"permissions": ["chrome://favicon/", "bookmarks"],
+	"version": "0.1"
 }

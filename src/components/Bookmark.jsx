@@ -4,7 +4,7 @@ export const Bookmark = ({ bookmark, columnObj, rootObj }) => {
 	const bookmarkRef = useRef();
 
 	const faviconStyle = {
-		backgroundImage: `url(https://www.google.com/s2/favicons?domain=${bookmark.url})`,
+		backgroundImage: `url(chrome://favicon/${bookmark.url})`,
 	};
 
 	const handleSelect = useCallback((e) => {
