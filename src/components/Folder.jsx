@@ -26,6 +26,9 @@ const Folder = ({ columnObj, folder, rootObj }) => {
       e.preventDefault();
       if (columnObj.columnIndex >= 0) rootObj.setFocusColumn(columnObj.columnIndex - 1);
     }
+    if (e.key === 'Backspace') {
+      rootObj.removeNode(folder);
+    }
   };
 
   const isSelected = rootObj.openFolderIds.some((obj) => obj.id === folder.id);

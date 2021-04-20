@@ -12,11 +12,12 @@ const App = () => {
 
   useEffect(() => {
     chrome.bookmarks.getTree((tree) => setBookmarkTree(tree));
-    // setBookmarkTree(fakeTree);
+    chrome.runtime.onMessage.addListener(handleMessage);
     chrome.storage.local.get('columnViewBookmarksOpenFolderIds', (result) => {
       let target = result.columnViewBookmarksOpenFolderIds;
       if (target) setOpenFolderIds(JSON.parse(target));
     });
+    // setBookmarkTree(fakeTree);
   }, []);
 
   useEffect(() => {
@@ -47,6 +48,21 @@ const App = () => {
     });
   };
 
+  const handleMessage = (msg) => {
+    // console.log(msg);
+    chrome.bookmarks.getTree((tree) => setBookmarkTree(tree));
+  };
+
+  const removeNode = (node) => {
+    if (node.children) {
+      let confirmRemove = window.confirm('Are you sure you want to remove this folder and all of its contents?');
+      if (confirmRemove) chrome.bookmarks.removeTree(node.id);
+    } else {
+      let confirmRemove = window.confirm('Are you sure you want to remove this bookmark?');
+      if (confirmRemove) chrome.bookmarks.remove(node.id);
+    }
+  };
+
   const updateOpenFolderIds = (folderObj) => {
     if (!openFolderIds.some((obj) => obj.id === folderObj)) {
       const findParentFolder = (parentId) => openFolderIds.find((obj) => obj.id === parentId);
@@ -65,6 +81,7 @@ const App = () => {
 
   const rootObj = {
     focusColumn: focusColumn,
+    removeNode: removeNode,
     setFocusColumn: setFocusColumn,
     openFolderIds: openFolderIds,
     openFolderIdsCallback: updateOpenFolderIds,

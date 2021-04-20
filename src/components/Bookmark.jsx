@@ -24,6 +24,9 @@ const Bookmark = ({ bookmark, columnObj, rootObj }) => {
       e.preventDefault();
       if (columnObj.columnIndex >= 0) rootObj.setFocusColumn(columnObj.columnIndex - 1);
     }
+    if (e.key === 'Backspace') {
+      rootObj.removeNode(bookmark);
+    }
   };
 
   return (
