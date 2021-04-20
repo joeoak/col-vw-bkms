@@ -1,26 +1,40 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-export const Bookmark = ({ bookmark, columnObj, rootObj }) => {
+const Bookmark = ({ bookmark, columnObj, rootObj }) => {
+	useEffect(() => {
+		if (columnObj.isColumnFocused && columnObj.currentFocus === bookmark.index) bookmarkRef.current.focus();
+	}, [bookmark, columnObj]);
+
 	const bookmarkRef = useRef();
 
 	const faviconStyle = {
 		backgroundImage: `url(chrome://favicon/${bookmark.url})`,
 	};
 
-	const handleSelect = useCallback((e) => {
-		columnObj.setFocus(bookmark.index);
+	const handleOnFocus = () => {
+		columnObj.setCurrentFocus(bookmark.index);
 		rootObj.setFocusColumn(columnObj.columnIndex);
+	};
+
+	const handleSelect = (e) => {
+		if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+			columnObj.updateCurrentFocus(bookmark.index, e.key);
+		}
 		if (e.key === 'ArrowLeft') {
+			e.preventDefault();
 			if (columnObj.columnIndex >= 0) rootObj.setFocusColumn(columnObj.columnIndex - 1);
 		}
-	}, [columnObj, bookmark, rootObj]);
-
-	useEffect(() => {
-		if (columnObj.isFocus && columnObj.focus) bookmarkRef.current.focus();
-	}, [columnObj]);
+	};
 
 	return (
-		<a className='column-item bookmark' href={bookmark.url} onClick={(e) => handleSelect(e)} onKeyDown={(e) => handleSelect(e)} ref={bookmarkRef} tabIndex={columnObj.isFocus && columnObj.focus ? 0 : -1}>
+		<a
+			className='column-item bookmark' // prettier ignore
+			href={bookmark.url}
+			onFocus={handleOnFocus}
+			onKeyDown={(e) => handleSelect(e)}
+			ref={bookmarkRef}
+			tabIndex={0}
+		>
 			<div className='column-item-icon'>
 				<div className='favicon' style={faviconStyle}></div>
 			</div>
@@ -28,3 +42,5 @@ export const Bookmark = ({ bookmark, columnObj, rootObj }) => {
 		</a>
 	);
 };
+
+export default Bookmark;
