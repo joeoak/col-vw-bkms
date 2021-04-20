@@ -17,5 +17,5 @@
     "128": "logo192.png"
   },
   "manifest_version": 2,
-  "permissions": ["chrome://favicon/", "bookmarks"]
+  "permissions": ["chrome://favicon/", "bookmarks", "storage"]
 }

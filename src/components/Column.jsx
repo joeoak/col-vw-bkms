@@ -3,7 +3,7 @@ import Bookmark from './Bookmark';
 import Folder from './Folder';
 
 const Column = ({ columnIndex, isColumnFocused, node, rootObj }) => {
-  const [currentFocus, setCurrentFocus] = useState(0);
+  const [currentFocus, setCurrentFocus] = useState();
 
   useEffect(() => {
     columnRef.current.scrollIntoView({ behavior: 'smooth' });
