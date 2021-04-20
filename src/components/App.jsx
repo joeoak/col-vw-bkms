@@ -11,10 +11,8 @@ const App = () => {
   const [openFolderIds, setOpenFolderIds] = useState([{ id: '0', parentId: null }]);
 
   useEffect(() => {
-    chrome.bookmarks.getTree((tree) => {
-      setBookmarkTree(tree);
-    });
-    // setBookmarkTree(fakeTree);
+    chrome.bookmarks.getTree((tree) => setBookmarkTree(tree));
+    setBookmarkTree(fakeTree);
     getOpenFolderIdsLocalStorage();
   }, []);
 
