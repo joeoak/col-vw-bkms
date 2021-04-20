@@ -1,4 +1,7 @@
 {
+  "name": "Column View Bookmarks",
+  "description": "Displays bookmarks in a column view.",
+  "version": "1.0",
 	"author": "Joe Oak",
 	"chrome_url_overrides": {
 		"bookmarks": "index.html"
@@ -10,7 +13,5 @@
 		"128": "logo192.png"
 	},
 	"manifest_version": 2,
-	"name": "Column View Bookmarks",
-	"permissions": ["chrome://favicon/", "bookmarks"],
-	"version": "0.1"
+	"permissions": ["chrome://favicon/", "bookmarks"]
 }

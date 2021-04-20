@@ -1,145 +1,145 @@
 :root {
-	--background-color: white;
-	--border-color: rgba(0, 0, 0, 0.16);
-	--column-item-background-focus: #0063de;
-	--column-item-background-hover: rgba(0, 0, 0, 0.08);
-	--column-item-background-selected: rgba(0, 0, 0, 0.12);
-	--column-item-font-color-focus: rgba(255, 255, 255, 0.96);
-	--column-item-icon-fill: rgba(0, 0, 0, 0.48);
-	--column-item-icon-fill-focus: rgba(255, 255, 255, 0.64);
-	--focus-outline: rgba(0, 0, 0, 0.96);
-	--font-color: rgba(0, 0, 0, 0.96);
-	--font-color-hint: rgba(0, 0, 0, 0.48);
+  --background-color: white;
+  --border-color: rgba(0, 0, 0, 0.16);
+  --column-item-background-focus: #0063de;
+  --column-item-background-hover: rgba(0, 0, 0, 0.08);
+  --column-item-background-selected: rgba(0, 0, 0, 0.12);
+  --column-item-font-color-focus: rgba(255, 255, 255, 0.96);
+  --column-item-icon-fill: rgba(0, 0, 0, 0.48);
+  --column-item-icon-fill-focus: rgba(255, 255, 255, 0.64);
+  --focus-outline: rgba(0, 0, 0, 0.96);
+  --font-color: rgba(0, 0, 0, 0.96);
+  --font-color-hint: rgba(0, 0, 0, 0.48);
 }
 
 @media (prefers-color-scheme: dark) {
-	:root {
-		--background-color: black;
-		--border-color: rgba(255, 255, 255, 0.16);
-		--column-item-background-focus: #0058cd;
-		--column-item-background-hover: rgba(255, 255, 255, 0.12);
-		--column-item-background-selected: rgba(255, 255, 255, 0.18);
-		--column-item-font-color-focus: rgba(255, 255, 255, 0.96);
-		--column-item-icon-fill: rgba(255, 255, 255, 0.64);
-		--column-item-icon-fill-focus: rgba(255, 255, 255, 0.64);
-		--focus-outline: rgba(255, 255, 255, 0.96);
-		--font-color: rgba(255, 255, 255, 0.96);
-		--font-color-hint: rgba(255, 255, 255, 0.48);
-	}
+  :root {
+    --background-color: black;
+    --border-color: rgba(255, 255, 255, 0.16);
+    --column-item-background-focus: #0058cd;
+    --column-item-background-hover: rgba(255, 255, 255, 0.12);
+    --column-item-background-selected: rgba(255, 255, 255, 0.18);
+    --column-item-font-color-focus: rgba(255, 255, 255, 0.96);
+    --column-item-icon-fill: rgba(255, 255, 255, 0.64);
+    --column-item-icon-fill-focus: rgba(255, 255, 255, 0.64);
+    --focus-outline: rgba(255, 255, 255, 0.96);
+    --font-color: rgba(255, 255, 255, 0.96);
+    --font-color-hint: rgba(255, 255, 255, 0.48);
+  }
 }
 
 * {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
-	font-size: 16px;
+  font-size: 16px;
 }
 
 body {
-	background-color: var(--background-color);
-	font-family: 'system-ui';
-	font-size: 1rem;
-	line-height: 1.5;
-	color: var(--font-color);
-	text-rendering: geometricPrecision;
+  background-color: var(--background-color);
+  font-family: 'system-ui';
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--font-color);
+  text-rendering: geometricPrecision;
 }
 
 a {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 #root {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
 }
 
 .app-header {
-	padding: 0.75rem;
-	border-bottom: 1px solid var(--border-color);
-	font-weight: 700;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 700;
 }
 
 .columns {
-	flex-grow: 1;
-	display: flex;
-	overflow-x: auto;
+  flex-grow: 1;
+  display: flex;
+  overflow-x: auto;
 }
 
 .column {
-	display: flex;
-	flex-direction: column;
-	flex-basis: 25%;
-	flex-shrink: 0;
-	padding: 0.25rem;
-	border-right: 1px solid var(--border-color);
-	overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 25%;
+  flex-shrink: 0;
+  padding: 0.25rem;
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
 }
 
 .column-item {
-	display: flex;
-	border-radius: 0.25rem;
-	// transition: background-color 200ms, color 200ms;
-	user-select: none;
+  display: flex;
+  border-radius: 0.25rem;
+  // transition: background-color 200ms, color 200ms;
+  user-select: none;
 
-	&.bookmark:hover,
-	&.folder:hover {
-		background-color: var(--column-item-background-hover);
-	}
+  &.bookmark:hover,
+  &.folder:hover {
+    background-color: var(--column-item-background-hover);
+  }
 
-	&.bookmark {
-		padding-right: 0.5rem;
-	}
+  &.bookmark {
+    padding-right: 0.5rem;
+  }
 
-	&.empty {
-		padding: 0 0.5rem;
-		color: var(--font-color-hint);
-		font-style: italic;
-	}
+  &.empty {
+    padding: 0 0.5rem;
+    color: var(--font-color-hint);
+    font-style: italic;
+  }
 
-	&.selected,
-	&.selected:hover {
-		background-color: var(--column-item-background-selected);
-	}
+  &.selected,
+  &.selected:hover {
+    background-color: var(--column-item-background-selected);
+  }
 
-	&:focus,
-	&:focus:hover {
-		outline: none;
-		background-color: var(--column-item-background-focus);
-		color: var(--column-item-font-color-focus);
+  &:focus,
+  &:focus:hover {
+    outline: none;
+    background-color: var(--column-item-background-focus);
+    color: var(--column-item-font-color-focus);
 
-		& path {
-			fill: var(--column-item-icon-fill-focus);
-			// transition: fill 200ms;
-		}
-	}
+    & path {
+      fill: var(--column-item-icon-fill-focus);
+      // transition: fill 200ms;
+    }
+  }
 }
 
 .column-item-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-	width: 2.5rem;
-	height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
 
-	& path {
-		fill: var(--column-item-icon-fill);
-	}
+  & path {
+    fill: var(--column-item-icon-fill);
+  }
 
-	& .favicon {
-		width: 16px;
-		height: 16px;
-		background-size: contain;
-	}
+  & .favicon {
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+  }
 }
 
 .column-item-title {
-	flex-grow: 1;
-	padding: 0.5rem 0;
+  flex-grow: 1;
+  padding: 0.5rem 0;
 }
