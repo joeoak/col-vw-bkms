@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { fakeTree } from '../fakeTree';
 import Column from './Column';
 import './App.scss';
+import { Folder } from './Icons';
 
 const App = () => {
   const [bookmarkTree, setBookmarkTree] = useState([]);
@@ -64,19 +65,17 @@ const App = () => {
   };
 
   const updateOpenFolderIds = (folderObj) => {
-    if (!openFolderIds.some((obj) => obj.id === folderObj)) {
-      const findParentFolder = (parentId) => openFolderIds.find((obj) => obj.id === parentId);
-      let newOpenFolderIds = [folderObj];
-      let targetFolder = folderObj;
-      let parentFolder;
-      while (targetFolder.id !== '0') {
-        parentFolder = findParentFolder(targetFolder.parentId);
-        newOpenFolderIds.unshift(parentFolder);
-        targetFolder = parentFolder;
-      }
-      chrome.storage.local.set({ columnViewBookmarksOpenFolderIds: JSON.stringify(newOpenFolderIds) });
-      setOpenFolderIds(newOpenFolderIds);
+    const findParentFolder = (parentId) => openFolderIds.find((obj) => obj.id === parentId);
+    let newOpenFolderIds = [folderObj];
+    let targetFolder = folderObj;
+    let parentFolder;
+    while (targetFolder.id !== '0') {
+      parentFolder = findParentFolder(targetFolder.parentId);
+      newOpenFolderIds.unshift(parentFolder);
+      targetFolder = parentFolder;
     }
+    chrome.storage.local.set({ columnViewBookmarksOpenFolderIds: JSON.stringify(newOpenFolderIds) });
+    setOpenFolderIds(newOpenFolderIds);
   };
 
   const rootObj = {
@@ -84,7 +83,7 @@ const App = () => {
     removeNode: removeNode,
     setFocusColumn: setFocusColumn,
     openFolderIds: openFolderIds,
-    openFolderIdsCallback: updateOpenFolderIds,
+    updateOpenFolderIds: updateOpenFolderIds,
   };
 
   return (

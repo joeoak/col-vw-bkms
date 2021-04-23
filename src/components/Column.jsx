@@ -43,9 +43,11 @@ const Column = ({ columnIndex, isColumnFocused, node, rootObj }) => {
   };
 
   const columnObj = {
-    columnIndex: columnIndex,
     currentFocus: currentFocus,
+    id: node.id,
+    columnIndex: columnIndex,
     isColumnFocused: isColumnFocused,
+    parentId: node.parentId,
     setCurrentFocus: setCurrentFocus,
     updateCurrentFocus: updateCurrentFocus,
   };

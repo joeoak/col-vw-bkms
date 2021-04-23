@@ -11,7 +11,7 @@ const Folder = ({ columnObj, folder, rootObj }) => {
   const handleOnFocus = () => {
     columnObj.setCurrentFocus(folder.index);
     rootObj.setFocusColumn(columnObj.columnIndex);
-    if (!isSelected) rootObj.openFolderIdsCallback({ id: folder.id, parentId: folder.parentId });
+    if (!isSelected) rootObj.updateOpenFolderIds({ id: folder.id, parentId: folder.parentId });
   };
 
   const handleSelect = (e) => {

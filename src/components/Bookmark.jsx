@@ -14,6 +14,7 @@ const Bookmark = ({ bookmark, columnObj, rootObj }) => {
   const handleOnFocus = () => {
     columnObj.setCurrentFocus(bookmark.index);
     rootObj.setFocusColumn(columnObj.columnIndex);
+    rootObj.updateOpenFolderIds({ id: columnObj.id, parentId: columnObj.parentId });
   };
 
   const handleSelect = (e) => {
