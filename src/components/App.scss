@@ -81,10 +81,23 @@ a {
   overflow-y: auto;
 }
 
+@media screen and (max-width: 60rem) {
+  .column {
+    flex-basis: 33.3%;
+  }
+}
+
+@media screen and (max-width: 48rem) {
+  .column {
+    flex-basis: 50%;
+  }
+}
+
 .column-item {
+  flex-shrink: 0;
   display: flex;
   border-radius: 0.25rem;
-  // transition: background-color 200ms, color 200ms;
+  overflow: hidden;
   user-select: none;
 
   &.bookmark:hover,
@@ -115,7 +128,6 @@ a {
 
     & path {
       fill: var(--column-item-icon-fill-focus);
-      // transition: fill 200ms;
     }
   }
 }
