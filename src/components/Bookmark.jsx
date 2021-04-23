@@ -1,6 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import TitleInput from './TitleInput';
 
 const Bookmark = ({ bookmark, columnObj, rootObj }) => {
+  const [isEditing, setIsEditing] = useState(false);
+
   useEffect(() => {
     if (columnObj.isColumnFocused && columnObj.currentFocus === bookmark.index) bookmarkRef.current.focus();
   }, [bookmark, columnObj]);
@@ -14,7 +17,7 @@ const Bookmark = ({ bookmark, columnObj, rootObj }) => {
   const handleOnFocus = () => {
     columnObj.setCurrentFocus(bookmark.index);
     rootObj.setFocusColumn(columnObj.columnIndex);
-    rootObj.updateOpenFolderIds({ id: columnObj.id, parentId: columnObj.parentId });
+    // rootObj.updateOpenFolderIds({ id: columnObj.id, parentId: columnObj.parentId });
   };
 
   const handleSelect = (e) => {
@@ -28,6 +31,15 @@ const Bookmark = ({ bookmark, columnObj, rootObj }) => {
     if (e.key === 'Backspace') {
       rootObj.removeNode(bookmark);
     }
+    if (e.key === 'e') {
+      e.preventDefault();
+      setIsEditing(true);
+    }
+  };
+
+  const renameCallback = (newTitle) => {
+    if (newTitle !== bookmark.title) rootObj.renameNode(bookmark, newTitle);
+    setIsEditing(false);
   };
 
   return (
@@ -35,14 +47,14 @@ const Bookmark = ({ bookmark, columnObj, rootObj }) => {
       className='column-item bookmark' // prettier ignore
       href={bookmark.url}
       onFocus={handleOnFocus}
-      onKeyDown={(e) => handleSelect(e)}
+      onKeyDown={(e) => (!isEditing ? handleSelect(e) : '')}
       ref={bookmarkRef}
       tabIndex={0}
     >
       <div className='column-item-icon'>
         <div className='favicon' style={faviconStyle}></div>
       </div>
-      <div className='column-item-title'>{bookmark.title}</div>
+      <div className='column-item-title'>{isEditing ? <TitleInput placeholder={bookmark.title} renameCallback={renameCallback} /> : bookmark.title}</div>
     </a>
   );
 };

@@ -1,9 +1,8 @@
 /* global chrome */
 import React, { useEffect, useState } from 'react';
-import { fakeTree } from '../fakeTree';
+// import { fakeTree } from '../fakeTree';
 import Column from './Column';
 import './App.scss';
-import { Folder } from './Icons';
 
 const App = () => {
   const [bookmarkTree, setBookmarkTree] = useState([]);
@@ -49,10 +48,7 @@ const App = () => {
     });
   };
 
-  const handleMessage = (msg) => {
-    // console.log(msg);
-    chrome.bookmarks.getTree((tree) => setBookmarkTree(tree));
-  };
+  const handleMessage = (msg) => chrome.bookmarks.getTree((tree) => setBookmarkTree(tree));
 
   const removeNode = (node) => {
     if (node.children) {
@@ -62,6 +58,10 @@ const App = () => {
       let confirmRemove = window.confirm('Are you sure you want to remove this bookmark?');
       if (confirmRemove) chrome.bookmarks.remove(node.id);
     }
+  };
+
+  const renameNode = (node, newTitle) => {
+    chrome.bookmarks.update(node.id, { title: newTitle });
   };
 
   const updateOpenFolderIds = (folderObj) => {
@@ -81,6 +81,7 @@ const App = () => {
   const rootObj = {
     focusColumn: focusColumn,
     removeNode: removeNode,
+    renameNode: renameNode,
     setFocusColumn: setFocusColumn,
     openFolderIds: openFolderIds,
     updateOpenFolderIds: updateOpenFolderIds,

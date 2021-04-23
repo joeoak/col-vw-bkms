@@ -1,7 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as Icons from './Icons';
+import TitleInput from './TitleInput';
 
 const Folder = ({ columnObj, folder, rootObj }) => {
+  const [isEditing, setIsEditing] = useState(false);
+
   useEffect(() => {
     if (columnObj.isColumnFocused && columnObj.currentFocus === folder.index) folderRef.current.focus();
   }, [columnObj, folder]);
@@ -29,20 +32,29 @@ const Folder = ({ columnObj, folder, rootObj }) => {
     if (e.key === 'Backspace') {
       rootObj.removeNode(folder);
     }
+    if (e.key === 'e') {
+      e.preventDefault();
+      setIsEditing(true);
+    }
   };
 
   const isSelected = rootObj.openFolderIds.some((obj) => obj.id === folder.id);
+
+  const renameCallback = (newTitle) => {
+    if (newTitle !== folder.title) rootObj.renameNode(folder, newTitle);
+    setIsEditing(false);
+  };
 
   return (
     <div
       className={isSelected ? 'column-item folder selected' : 'column-item folder'} // prettier ignore
       onFocus={handleOnFocus}
-      onKeyDown={(e) => handleSelect(e)}
+      onKeyDown={(e) => (!isEditing ? handleSelect(e) : '')}
       ref={folderRef}
       tabIndex={0}
     >
       <div className='column-item-icon'>{Icons.Folder}</div>
-      <div className='column-item-title'>{folder.title}</div>
+      <div className='column-item-title'>{isEditing ? <TitleInput placeholder={folder.title} renameCallback={renameCallback} /> : folder.title}</div>
       <div className='column-item-icon'>{Icons.Chevron}</div>
     </div>
   );

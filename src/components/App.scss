@@ -155,3 +155,23 @@ a {
   flex-grow: 1;
   padding: 0.5rem 0;
 }
+
+.column-item-title-input {
+  display: flex;
+  border-radius: 2px;
+  width: calc(100% + 0.25rem);
+  margin: 0 0 0 -0.25rem;
+  padding: 0 0.25rem;
+  border: none;
+  box-shadow: 0 0 0 1px var(--border-color);
+  outline: none;
+  background-color: var(--background-color);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+
+  &::placeholder {
+    color: var(--font-color-hint);
+  }
+}

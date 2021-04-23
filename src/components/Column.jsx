@@ -11,7 +11,7 @@ const Column = ({ columnIndex, isColumnFocused, node, rootObj }) => {
 
   useEffect(() => {
     if (isColumnFocused && !currentFocus) setCurrentFocus(0);
-  }, [isColumnFocused]);
+  }, [currentFocus, isColumnFocused]);
 
   const columnRef = useRef();
 
